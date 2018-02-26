@@ -196,12 +196,14 @@ public class SpamDetector {
 
     public static void main(String[] args) {
 
+        if (args.length < 1) {
+            System.err.println("Usage: java WordCounter <dir> <outfile>");
+            System.exit(0);
+        }
 
         SpamDetector spamDetector = new SpamDetector();
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("."));
-        directoryChooser.setTitle("Select a directory with test and train folders");
-        File file = directoryChooser.showDialog(null);
+
+        File file = new File(args[0]);
 
             if (file.isDirectory()) {
                 File[] contents = file.listFiles();
@@ -218,7 +220,12 @@ public class SpamDetector {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else if (name.equals("test")) {
+                    }
+                }
+
+                for (File current : contents) {
+                    String name = current.getName().toLowerCase();
+                    if (name.equals("test")) {
                         try {
                             spamDetector.processTestFiles(current);
                         } catch (FileNotFoundException e) {
@@ -229,6 +236,8 @@ public class SpamDetector {
                         }
                     }
                 }
+            } else {
+                System.out.println("this is a FILE not a FOLDER stoopid");
             }
 
 
