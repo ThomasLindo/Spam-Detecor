@@ -1,3 +1,6 @@
+//this is a class for each word in a file, each word has a atring for the word itself,
+// ints for how many times it was found in a spam or ham file, doubles to get the ham and spam probabilities of each word
+// and a boolean for if the word has been encountered already in the file as to avoid double counting
 package sample;
 
 public class Word {
@@ -8,13 +11,13 @@ public class Word {
     private double Hprob;
     private boolean encountered;
 
-    public Word(String w){
+    public Word(String w) {
         word = w;
-        Scount=0;
-        Hcount=0;
-        Sprob=0.0;
-        Hprob=0.0;
-        encountered=false;
+        Scount = 0;
+        Hcount = 0;
+        Sprob = 0.0;
+        Hprob = 0.0;
+        encountered = false;
     }
 
 
@@ -62,8 +65,11 @@ public class Word {
         return encountered;
     }
 
-    public double getSpamFileProb(){
-        return Sprob/(Sprob+Hprob);
+    public double getSpamFileProb() {
+        //this function gives the probability if the file is spam if it has this word
+        //it has been modified to better deal with rare words
+        double PreSpamicity = Sprob / (Sprob + Hprob);
+        return (3 * 0.5 + (getScount() + getHcount()) * PreSpamicity) / (3 + (getScount() + getHcount()));
     }
 
     public void setEncountered(boolean encountered) {
